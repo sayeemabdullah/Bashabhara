@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "847252044418",
+    "firebase_url": "https://bashabhara-b3268.firebaseio.com",
+    "project_id": "bashabhara-b3268",
+    "storage_bucket": "bashabhara-b3268.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847252044418:android:b703d802bb3777ec",
+        "android_client_info": {
+          "package_name": "com.example.bashabhara"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847252044418-mu09bncgbi00me8jcrfr3ubbckbok56j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bashabhara",
+            "certificate_hash": "cfe83d7f5df2e6d3e89a3022e1ade51343b162ae"
+          }
+        },
+        {
+          "client_id": "847252044418-8bhl421so9trg0ff6rvshhrpaslrqk6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeO-XrUN2dErGbDHQIyIb26WazQS8Wtf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847252044418-8bhl421so9trg0ff6rvshhrpaslrqk6i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
