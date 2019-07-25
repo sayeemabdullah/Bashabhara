@@ -45,34 +45,6 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
-        /*
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-                // Creating a marker
-                MarkerOptions markerOptions = new MarkerOptions();
-
-                // Setting the position for the marker
-                markerOptions.position(latLng);
-
-                // Setting the title for the marker.
-                // This will be displayed on taping the marker
-                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-
-                // Clears the previously touched position
-                mMap.clear();
-
-                // Animating to the touched position
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                // Placing a marker on the touched position
-                mMap.addMarker(markerOptions);
-            }
-        });*/
-
     }
 
     @Override
@@ -87,7 +59,7 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
     public void requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         if(EasyPermissions.hasPermissions(this, perms)) {
-            Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
         }
         else {
             EasyPermissions.requestPermissions(this, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
@@ -148,6 +120,11 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                 // Setting the title for the marker.
                 // This will be displayed on taping the marker
                 markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
+
+                // Setting the snippet for the marker.
+                // This will be displayed on taping the marker below title
+                markerOptions.snippet("These are the position.");
 
                 // Clears the previously touched position
                 mMap.clear();
