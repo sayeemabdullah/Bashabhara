@@ -2,12 +2,11 @@ package com.example.bashabhara;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -32,7 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -45,7 +44,7 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestLocationPermission();
-        setContentView(R.layout.activity_bariwala_map);
+        setContentView(R.layout.activity_bharatiya_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -56,7 +55,7 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(BariwalaMapActivity.this, MainActivity.class);
+                Intent intent = new Intent(BharatiyaMapActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
                 return;
