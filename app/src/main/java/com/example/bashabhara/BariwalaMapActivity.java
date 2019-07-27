@@ -39,7 +39,7 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
     Location mLastLocation;
     LocationRequest mLocationRequest;
 
-    private Button mLogout;
+    private Button mLogout , mSettings;
     private final int REQUEST_LOCATION_PERMISSION = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,9 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
         mapFragment.getMapAsync(this);
 
         mLogout = (Button) findViewById(R.id.logout);
+        mSettings = (Button) findViewById(R.id.settings);
+
+
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +62,15 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                 Intent intent = new Intent(BariwalaMapActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+                return;
+            }
+        });
+
+        mSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BariwalaMapActivity.this, BariwalaSettingsActivity.class);
+                startActivity(intent);
                 return;
             }
         });
@@ -117,11 +129,14 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-        /*mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title("TickTok"));
-
-        mMap.setOnMarkerClickListener(this);*/
+        // Test Start
+        String c = "24,90";
+        int a=24,b=90;
+        MarkerOptions DhakaMarker = new MarkerOptions();
+        DhakaMarker.position(new LatLng(a,b));
+        DhakaMarker.title("Dhaka");
+        mMap.addMarker(DhakaMarker);
+        // Test End
 
         //start
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

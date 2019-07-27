@@ -27,6 +27,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -37,6 +43,7 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
+
 
     private Button mLogout , mSettings;
     private final int REQUEST_LOCATION_PERMISSION = 1;
@@ -52,6 +59,7 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
 
         mLogout = (Button) findViewById(R.id.logout);
         mSettings = (Button) findViewById(R.id.settings);
+
 
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +82,7 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
         });
 
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -124,17 +133,12 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
 
         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
 
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
 
-        // Test Start
-        int a=24,b=90;
-        MarkerOptions DhakaMarker = new MarkerOptions();
-        DhakaMarker.position(new LatLng(a,b));
-        DhakaMarker.title("Dhaka");
-        mMap.addMarker(DhakaMarker);
-        // Test End
+
 
         mMap.setOnMarkerClickListener(this);
 
@@ -173,6 +177,8 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
     }
 
     public boolean onMarkerClick(final Marker marker) {
+
+
 
         // Retrieve the data from the marker.
         Integer clickCount = (Integer) marker.getTag();
