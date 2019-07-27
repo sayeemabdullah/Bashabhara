@@ -32,7 +32,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BariwalaSettingsActivity"></activity>
+        <activity android:name=".BariwalaAddBashaActivity"></activity>
+        <activity android:name=".BariwalaSettingsActivity" />
         <activity android:name=".BharatiyaSettingsActivity" />
         <activity android:name=".BharatiyaMapActivity" />
         <!--

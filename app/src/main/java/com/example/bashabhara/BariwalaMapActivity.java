@@ -28,6 +28,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -39,8 +48,16 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
     Location mLastLocation;
     LocationRequest mLocationRequest;
 
-    private Button mLogout , mSettings;
+    private Button mLogout , mSettings , mAdd;
     private final int REQUEST_LOCATION_PERMISSION = 1;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mBariwalaDatabase;
+
+    private String userID;
+    private String lo;
+    private String la;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +70,7 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
 
         mLogout = (Button) findViewById(R.id.logout);
         mSettings = (Button) findViewById(R.id.settings);
+        mAdd = (Button) findViewById(R.id.add);
 
 
         mLogout.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +93,32 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
             }
         });
 
+        mAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BariwalaMapActivity.this, BariwalaAddBashaActivity.class);
+                startActivity(intent);
+                return;
+            }
+        });
+
     }
+
+   /* private void getLocationMarker(){
+        mBariwalaDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        }
+
+
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -104,9 +147,35 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
         }
         buildGoogleApiClient();
         mMap.setMyLocationEnabled(true);
+        //mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location");
 
+        /*
+        //start
+        mBariwalaDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                LatLng newLocation = new LatLng(
+                        dataSnapshot.child("latitude").getValue(Long.class),
+                        dataSnapshot.child("longitude").getValue(Long.class)
+                );
+                mMap.addMarker(new MarkerOptions()
+                        .position(newLocation)
+                        .title(dataSnapshot.getKey()));
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
 
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+        //end*/
         //LatLng newmarklang = new LatLng(location.getLatitude(),location.getLongitude());
 
     }
@@ -122,6 +191,12 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
 
     @Override
     public void onLocationChanged(Location location) {
+
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+        //mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location").child(userID);
+        mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location");
+
         mLastLocation = location;
 
         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
@@ -129,14 +204,29 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
+        /*
+        Intent intent = getIntent();
+        String mAddress = intent.getStringExtra("address");
+        String mArea = intent.getStringExtra("area");
+        String mLat = intent.getStringExtra("latitude");
+        String mLong = intent.getStringExtra("longitude");
+        String mSquarefeet = intent.getStringExtra("squarefeet");
+        String mRooms = intent.getStringExtra("rooms");
+        String mRent = intent.getStringExtra("rent");
+        String mNumber = intent.getStringExtra("number");
+
+
         // Test Start
-        String c = "24,90";
-        int a=24,b=90;
-        MarkerOptions DhakaMarker = new MarkerOptions();
-        DhakaMarker.position(new LatLng(a,b));
-        DhakaMarker.title("Dhaka");
-        mMap.addMarker(DhakaMarker);
+        MarkerOptions BariwlaMarker = new MarkerOptions();
+        double a =Double.parseDouble(mLat);
+        double b = Double.parseDouble(mLong);
+        BariwlaMarker.position(new LatLng(a,b));
+        BariwlaMarker.title("Address :" + mAddress +"\n"+"Area :" + mArea + "\n" +"Square Feet :" + mSquarefeet + "\n" +
+                "Rooms :"+mRooms);
+        BariwlaMarker.snippet("Rent :"+mRent);
+        mMap.addMarker(BariwlaMarker);
         // Test End
+        */
 
         //start
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -150,6 +240,15 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
+                //start
+                Map usersetloc = new HashMap();
+                usersetloc.put("latitude", latLng.latitude);
+                usersetloc.put("longitude", latLng.longitude);
+                //mBariwalaDatabase.updateChildren(usersetloc);
+                mBariwalaDatabase.child(mAuth.getCurrentUser().getUid()).push().setValue(usersetloc);
+                //end
+
+
                 // Setting the title for the marker.
                 // This will be displayed on taping the marker
                 markerOptions.title(latLng.latitude + " : " + latLng.longitude);
@@ -157,9 +256,10 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
 
                 // Setting the snippet for the marker.
                 // This will be displayed on taping the marker below title
-                markerOptions.snippet("These are the position.");
+                markerOptions.snippet("This is position's latitude & longitude. Just copy to the Latitude & Longitude Fields");
 
                 // Clears the previously touched position
+
                 mMap.clear();
 
                 // Animating to the touched position
