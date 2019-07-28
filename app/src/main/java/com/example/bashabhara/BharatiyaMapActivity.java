@@ -11,13 +11,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.ViewTarget;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -48,7 +53,6 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
-
 
     private Button mLogout , mSettings;
     private final int REQUEST_LOCATION_PERMISSION = 1;
@@ -129,10 +133,11 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
                     String mArea = ds.child("area").getValue(String.class);
                     String mlat = ds.child("latitude").getValue(String.class);
                     String mlong = ds.child("longitude").getValue(String.class);
-                    String mnumber = ds.child("number").getValue(String.class);
+                    final String mnumber = ds.child("number").getValue(String.class);
                     String mRent = ds.child("rent").getValue(String.class);
                     String mRooms = ds.child("rooms").getValue(String.class);
                     String mSquarefeet = ds.child("squarefeet").getValue(String.class);
+                    String mImage = ds.child("BashaImageUrl").getValue(String.class);
 
                     MarkerOptions BariwlaMarker = new MarkerOptions();
                     double a =Double.parseDouble(mlat);
@@ -145,9 +150,18 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
                     BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.placeholder);
                     Bitmap x=bitmapdraw.getBitmap();
                     Bitmap smallMarker = Bitmap.createScaledBitmap(x, width, height, false);
-
                     BariwlaMarker.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                    //Start
+                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker BariwlaMarker) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mnumber, null));
+                            startActivity(intent);
+                        }
+                    });
+                    //End
                     mMap.addMarker(BariwlaMarker);
+
                     //Log.d("TAG", newsAuthor + " / " + newsDate + " / " + newsDesc + " / " + newsImageUrl + " / " + newsTitle + " / " + newsUrl);
                 }
             }
