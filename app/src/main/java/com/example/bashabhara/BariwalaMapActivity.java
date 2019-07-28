@@ -10,6 +10,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -243,6 +246,13 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                     BariwlaMarker.position(new LatLng(a,b));
                     BariwlaMarker.title("Address :" + mAddress + "," + mArea);
                     BariwlaMarker.snippet(" Rooms: "+ mRooms +" Square Feet: " + mSquarefeet + " Rent: "+mRent);
+                    int height = 100;
+                    int width = 100;
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.placeholder);
+                    Bitmap x=bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(x, width, height, false);
+
+                    BariwlaMarker.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                     mMap.addMarker(BariwlaMarker);
 
                     /*if(map.get("profileImageUrl")!=null){
@@ -324,6 +334,13 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
+                int height = 100;
+                int width = 100;
+                BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.placeholder);
+                Bitmap b=bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                 //start
                 //Map usersetloc = new HashMap();
                 //usersetloc.put("latitude", latLng.latitude);

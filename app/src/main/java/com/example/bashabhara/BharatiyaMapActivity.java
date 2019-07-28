@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -137,6 +140,13 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
                     BariwlaMarker.position(new LatLng(a,b));
                     BariwlaMarker.title("Address: " + mAddress +"," + mArea);
                     BariwlaMarker.snippet("Rent: "+mRent + " Square Feet: "+ mSquarefeet+" Rooms: "+mRooms);
+                    int height = 100;
+                    int width = 100;
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.placeholder);
+                    Bitmap x=bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(x, width, height, false);
+
+                    BariwlaMarker.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                     mMap.addMarker(BariwlaMarker);
                     //Log.d("TAG", newsAuthor + " / " + newsDate + " / " + newsDesc + " / " + newsImageUrl + " / " + newsTitle + " / " + newsUrl);
                 }
