@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -113,6 +115,42 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
         mMap.setMyLocationEnabled(true);
 
 
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference bariwaladatabase = ref.child("Users").child("Location");
+
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String mAddress = ds.child("address").getValue(String.class);
+                    String mArea = ds.child("area").getValue(String.class);
+                    String mlat = ds.child("latitude").getValue(String.class);
+                    String mlong = ds.child("longitude").getValue(String.class);
+                    String mnumber = ds.child("number").getValue(String.class);
+                    String mRent = ds.child("rent").getValue(String.class);
+                    String mRooms = ds.child("rooms").getValue(String.class);
+                    String mSquarefeet = ds.child("squarefeet").getValue(String.class);
+
+                    MarkerOptions BariwlaMarker = new MarkerOptions();
+                    double a =Double.parseDouble(mlat);
+                    double b = Double.parseDouble(mlong);
+                    BariwlaMarker.position(new LatLng(a,b));
+                    BariwlaMarker.title("Address: " + mAddress +"," + mArea);
+                    BariwlaMarker.snippet("Rent: "+mRent + " Square Feet: "+ mSquarefeet+" Rooms: "+mRooms);
+                    mMap.addMarker(BariwlaMarker);
+                    //Log.d("TAG", newsAuthor + " / " + newsDate + " / " + newsDesc + " / " + newsImageUrl + " / " + newsTitle + " / " + newsUrl);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        bariwaladatabase.addListenerForSingleValueEvent(eventListener);
+
+
 
         //LatLng newmarklang = new LatLng(location.getLatitude(),location.getLongitude());
 
@@ -142,7 +180,7 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
 
         mMap.setOnMarkerClickListener(this);
 
-        //start
+        /*//start
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -161,10 +199,10 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
 
                 // Setting the snippet for the marker.
                 // This will be displayed on taping the marker below title
-                markerOptions.snippet("These are the position.");
+                markerOptions.snippet("These are the latitude and longitude.");
 
                 // Clears the previously touched position
-                mMap.clear();
+                ////mMap.clear();
 
                 // Animating to the touched position
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -173,7 +211,7 @@ public class BharatiyaMapActivity extends FragmentActivity implements GoogleMap.
                 mMap.addMarker(markerOptions);
             }
         });
-        //end
+        //end*/
     }
 
     public boolean onMarkerClick(final Marker marker) {
