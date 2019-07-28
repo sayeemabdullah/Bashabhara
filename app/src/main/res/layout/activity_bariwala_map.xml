@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add"
-            android:text="Add"/>
+            android:text="My Ad"/>
 
 
     </LinearLayout>

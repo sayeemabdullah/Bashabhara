@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -57,6 +58,16 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
     private String userID;
     private String lo;
     private String la;
+
+
+    private String mAddress;
+    private String mArea;
+    private String mLat;
+    private String mLong;
+    private String mSquarefeet;
+    private String mRooms;
+    private String mRent;
+    private String mNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +158,11 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
         }
         buildGoogleApiClient();
         mMap.setMyLocationEnabled(true);
+
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+        mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location").child(userID);
+        getBariwalaMarker();
         //mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location");
 
         /*
@@ -180,6 +196,71 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
 
     }
 
+    private void getBariwalaMarker(){
+        mBariwalaDatabase.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                /*
+        String mAddress = intent.getStringExtra("address");
+        String mArea = intent.getStringExtra("area");
+        String mLat = intent.getStringExtra("latitude");
+        String mLong = intent.getStringExtra("longitude");
+        String mSquarefeet = intent.getStringExtra("squarefeet");
+        String mRooms = intent.getStringExtra("rooms");
+        String mRent = intent.getStringExtra("rent");
+        String mNumber = intent.getStringExtra("number");*/
+                if(dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    if(map.get("address")!=null){
+                        mAddress = map.get("address").toString();
+                    }
+                    if(map.get("area")!=null){
+                        mArea = map.get("area").toString();
+                    }
+                    if(map.get("latitude")!=null){
+                        mLat = map.get("latitude").toString();
+                    }
+                    if(map.get("longitude")!=null){
+                        mLong = map.get("longitude").toString();
+                    }
+                    if(map.get("squarefeet")!=null){
+                        mSquarefeet = map.get("squarefeet").toString();
+                    }
+                    if(map.get("rooms")!=null){
+                        mRooms = map.get("rooms").toString();
+                    }
+                    if(map.get("rent")!=null){
+                        mRent = map.get("rent").toString();
+                    }
+                    if(map.get("number")!=null){
+                        mNumber = map.get("number").toString();
+                    }
+
+                    MarkerOptions BariwlaMarker = new MarkerOptions();
+                    double a =Double.parseDouble(mLat);
+                    double b = Double.parseDouble(mLong);
+                    BariwlaMarker.position(new LatLng(a,b));
+                    BariwlaMarker.title("Address :" + mAddress + "," + mArea);
+                    BariwlaMarker.snippet(" Rooms: "+ mRooms +" Square Feet: " + mSquarefeet + " Rent: "+mRent);
+                    mMap.addMarker(BariwlaMarker);
+
+                    /*if(map.get("profileImageUrl")!=null){
+                        mProfileImageUrl = map.get("profileImageUrl").toString();
+                        Glide.with(getApplication()).load(mProfileImageUrl).into(mProfileImage);
+                    }*/
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
     protected synchronized void buildGoogleApiClient(){
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -192,10 +273,10 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
     @Override
     public void onLocationChanged(Location location) {
 
-        mAuth = FirebaseAuth.getInstance();
-        userID = mAuth.getCurrentUser().getUid();
+        //mAuth = FirebaseAuth.getInstance();
+        //userID = mAuth.getCurrentUser().getUid();
         //mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location").child(userID);
-        mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location");
+        //mBariwalaDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Location");
 
         mLastLocation = location;
 
@@ -203,6 +284,9 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+
+
 
         /*
         Intent intent = getIntent();
@@ -241,11 +325,11 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                 markerOptions.position(latLng);
 
                 //start
-                Map usersetloc = new HashMap();
-                usersetloc.put("latitude", latLng.latitude);
-                usersetloc.put("longitude", latLng.longitude);
+                //Map usersetloc = new HashMap();
+                //usersetloc.put("latitude", latLng.latitude);
+                //usersetloc.put("longitude", latLng.longitude);
                 //mBariwalaDatabase.updateChildren(usersetloc);
-                mBariwalaDatabase.child(mAuth.getCurrentUser().getUid()).push().setValue(usersetloc);
+                //mBariwalaDatabase.child(mAuth.getCurrentUser().getUid()).push().setValue(usersetloc);
                 //end
 
 
@@ -260,7 +344,7 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
 
                 // Clears the previously touched position
 
-                mMap.clear();
+                //mMap.clear();
 
                 // Animating to the touched position
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
