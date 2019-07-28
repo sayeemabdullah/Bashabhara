@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".BharatiyaLoginActivity"
     android:orientation="vertical">
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="match_parent"
+        android:layout_height="293dp"
+        android:src="@drawable/logoba" />
 
     <EditText
         android:layout_width="match_parent"
