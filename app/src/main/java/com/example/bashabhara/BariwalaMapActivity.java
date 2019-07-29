@@ -334,9 +334,9 @@ public class BariwalaMapActivity extends FragmentActivity implements GoogleMap.O
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
-                int height = 100;
-                int width = 100;
-                BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.placeholder);
+                int height = 90;
+                int width = 90;
+                BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.house);
                 Bitmap b=bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
